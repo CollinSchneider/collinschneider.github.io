@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+#console {
+  background: black;
+  cursor: text;
+  width: 100vw;
+  height: 100vh;
+  padding: 10px;
+  overflow-wrap: break-word;
+  overflow-y: scroll;
+}
+
+#console .blinking {
+  animation: blink-animation 1s steps(5, start) infinite;
+  -webkit-animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+@-webkit-keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
+#console .text {
+  color: lime;
+  font-family: 'Lexend Mega', sans-serif;
+  font-size: 12px;
+}
+
+#console .directory {
+  margin-right: 5px;
+}
+
+#console .directory, #console .input, #console #cursor {
+  display: inline-block;
+}
+
+#console .directory {
+  vertical-align: top;
+}
