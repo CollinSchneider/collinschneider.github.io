@@ -16,6 +16,7 @@ function ConsoleHandler(consoleElement, options) {
     _.currentLineInput = _.currentLine.querySelector('.input'),
     _.currentUserInput = '',
     _.cursor = _.currentLine.querySelector('#cursor'),
+    _.hiddenMobileInput = document.querySelector('#hidden-input-container'),
     _.controlKeyIsPressed = false,
     _.commandKeyIsPressed = false,
     // Enter, Backspace, Commnand, Control, Left, Right, Up, Down
@@ -304,5 +305,11 @@ function ConsoleHandler(consoleElement, options) {
     _.currentLine.appendChild(_.cursor);
     _.console.append(lineBreak);
     _.console.append(newLine);
+    _._moveHiddenInputToFocusedLine(newLine)
+  }
+
+  _._moveHiddenInputToFocusedLine = function(newLine) {
+    var rect = newLine.getBoundingClientRect();
+    _.hiddenMobileInput.style.top = rect.top + 'px';
   }
 }
