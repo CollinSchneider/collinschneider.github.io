@@ -99,7 +99,7 @@ function ConsoleHandler(consoleElement, options) {
   _._checkHotKeys = function(event) {
     if(event.keyCode === 17) {
       _.controlKeyIsPressed = true;
-    } else if(event.keyCode === 91) {
+    } else if(event.keyCode === 91 || event.keyCode === 93) {
       _.commandKeyIsPressed = true
     }
     if(_.controlKeyIsPressed && event.keyCode === 67) {
@@ -206,6 +206,7 @@ function ConsoleHandler(consoleElement, options) {
                       Run `help` at any time to see this list of available methods\n\
                       Run `help name` to find out more about the method `name`\n\n\
                       Basic Usage:\n\
+                      If you\'d rather view the site from a GUI, use the `gui` command\n\
                       Use the up and down arrows to rotate through your command history.\n\
                       Command + C starts a new line\n\
                       Command + K flushes the console\n\n\
@@ -216,7 +217,7 @@ function ConsoleHandler(consoleElement, options) {
                       email --method=[print|program]...........write an email to collin\n\
                       resume --format=[browser|download]...view collin\'s resume\n\
                       about....................................................learn more about collin\n\
-                      linkedin.................................................view collin\'s linkedin');
+                      linkedin.................................................view collin\'s linkedin\n\n');
     }
   }
 
@@ -225,7 +226,7 @@ function ConsoleHandler(consoleElement, options) {
   }
 
   _._logAbout = function() {
-    _._logMessage('Programmer, learner, teacher, basketball junkie, negroni enjoyer.')
+    _._logMessage('Programmer, basketball junkie, negroni enjoyer.')
   }
 
   _._email = function(methodArguments) {
