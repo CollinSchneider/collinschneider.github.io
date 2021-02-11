@@ -3,6 +3,11 @@ body {
   overflow: hidden;
 }
 
+#hiddenInput {
+  margin-top: -100px;
+  position: absolute;
+}
+
 #console {
   background: black;
   cursor: text;

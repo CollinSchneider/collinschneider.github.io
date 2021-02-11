@@ -1,5 +1,6 @@
 window.addEventListener('load', function() {
   var consoleEl = document.querySelector('#console')
+  document.querySelector('#hiddenInput').focus();
   var consoleHandler = new ConsoleHandler(consoleEl);
   consoleHandler.start();
 });
@@ -15,7 +16,7 @@ function ConsoleHandler(consoleElement, options) {
     _.controlKeyIsPressed = false,
     _.commandKeyIsPressed = false,
     // Enter, Backspace, Commnand, Control, Left, Right, Up, Down
-    _.noResponseKeyCodes = [8, 9, 13, 20, 16, 17, 18, 19, 27, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 91, 93, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124],
+    _.noResponseKeyCodes = [8, 9, 13, 20, 16, 17, 18, 19, 27, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46, 73, 91, 93, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124],
     _.commandHistory = JSON.parse(localStorage.getItem('collinOSCommandHistory') || '[]'),
     _.currentCommandHistoryIndex = _.commandHistory.length;
     _.directories = {
