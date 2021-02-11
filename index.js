@@ -1,6 +1,9 @@
 window.addEventListener('load', function() {
   var consoleEl = document.querySelector('#console')
-  document.querySelector('#hidden-input').focus();
+  consoleEl.addEventListener('click', function() {
+    document.querySelector('#hidden-input').focus();
+  })
+  consoleEl.click();
   var consoleHandler = new ConsoleHandler(consoleEl);
   consoleHandler.start();
 });
