@@ -50,10 +50,14 @@ body.console {
   margin-right: 5px;
 }
 
-#console .directory, #console .input, #console #cursor {
+#console .directory, #console .user-input, #console #cursor {
   display: inline-block;
 }
 
 #console .directory {
   vertical-align: top;
+}
+
+#console .character, #console .results {
+  white-space: pre;
 }
