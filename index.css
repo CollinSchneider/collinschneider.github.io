@@ -58,6 +58,10 @@ body.console {
   vertical-align: top;
 }
 
-#console .character, #console .results {
+#console .results {
+  white-space: pre-line;
+}
+
+#console .character {
   white-space: pre;
 }
