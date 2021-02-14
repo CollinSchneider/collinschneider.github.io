@@ -1,85 +1,30 @@
+import { commandDictionary } from './commandDictionary.js';
+import { FileDirectoryManager } from './fileDirectoryManager.js';
+
 class MethodHandler {
   constructor(commandLine) {
     this.commandLine = commandLine;
     this.commandHistory = this.commandLine.commandHistory;
-    this.directoryNavigator = this.commandLine.directoryNavigator;
-    this.availableMethods = ['help', 'clear', 'gui', 'curl', 'about', 'resume', 'email', 'pwd', 'ls', 'cd', 'linkedin'];
-    this.commandDictionary = {
-      '': {
-        function: this.commandLine.newLine
-      },
-      'help': {
-        function: this._logHelp,
-        help: 'Run `help` at any time to see this list of available methods\n\
-                Run `help name` to find out more about the method `name`'
-      },
-      'clear': {
-        function: this._clearConsole,
-        help: 'Use `clear` to flush the console clean.'
-      },
-      'gui': {
-        function: this._displayGui,
-        help: 'Use `gui` to switch from the CLI view to the GUI.'
-      },
-      'curl': {
-        function: this._curl,
-        help: 'Use `curl` to make a curl request to the (mandatory) URL endpoint provided.\n\n\
-                Optional arguments:\n\
-                --method or --X to specify the request method (GET, POST)\n\
-                --data or -d to provide a JSON payload in your POST request (NO spaces)\n\n\
-                Example:\n\
-                curl https://www.google.com/foo --method=POST --data={"bar":"baz","hello":"world"}\n\n'
-      },
-      'about': {
-        function: this._logAbout,
-        help: 'Use `about` to learn more about collin.'
-      },
-      'resume': {
-        function: this._presentResume,
-        help: 'Use `resume` to take a peak at collin\'s resume.\n\
-                Accepts the --format argument of `browser` or `download`. Default is `browser`.'
-      },
-      'email': {
-        function: this._email,
-        help: 'Use `email` to return collin\'s email.\n\
-                Accepts the --method argument of `print` to print collin\'s email to STDOUT or `program` to compose an email in your default mail program. Default is `print`.'
-      },
-      'pwd':{
-        function:  this._pwd,
-        help: 'Use `pwd` to print current location'
-      },
-      'ls': {
-        function: this._ls,
-        help: 'Use `ls` to list other files and directories.'
-      },
-      'cd': {
-        function: this._cd,
-        help: 'Use `cd` to change directories.'
-      },
-      'cat': {
-        function: this._cat,
-        help: 'Use `cat` to print content of the specified file.'
-      },
-      'linkedin': {
-        function: this._linkedin,
-        help: 'Use `linkedin` to open collin\'s LinkedIn page in a new tab in your browser.'
-      }
-    }
-    this._logHelp();
+    this.navigator = this.commandLine.navigator;
+    this.commandDictionary = commandDictionary;
+    this.availableMethods = Object.keys(this.commandDictionary);
+    this.fileDirectoryManager = new FileDirectoryManager(this.navigator);
+    this._help();
   }
 
   handleMethod = inputtedCommand => {
     var trimmedCommand = inputtedCommand.trim();
-    var splitCommand = trimmedCommand.split(/\s(.+)/)
-    var commandToRun = this.commandDictionary[splitCommand[0]];
-    var args = splitCommand[1];
-    if(trimmedCommand !== "") {
-      this.commandHistory.addCommandToHistory(trimmedCommand);
-    }
-    if(commandToRun) {
-      commandToRun.function(args);
+    if(trimmedCommand === "") {
+      this.commandLine.newLine();
     } else {
-      this._invalidCommand(trimmedCommand);
+      var splitCommand = trimmedCommand.split(/\s(.+)/)
+      var commandToRun = this.commandDictionary[splitCommand[0]];
+      this.commandHistory.addCommandToHistory(trimmedCommand);
+      if(commandToRun) {
+        this[`_${splitCommand[0]}`](splitCommand[1]);
+      } else {
+        this._invalidCommand(trimmedCommand);
+      }
     }
   }
 
@@ -110,12 +55,12 @@ class MethodHandler {
     this.commandLine.clearConsole(true);
   }
 
-  _logHelp = optionalMethod => {
+  _help = optionalMethod => {
     if(optionalMethod) {
       if(this.commandDictionary[optionalMethod]) {
         this._logResult(this.commandDictionary[optionalMethod].help)
       } else {
-        this.invalidMethod(optionalMethod)
+        this._invalidCommand(optionalMethod)
       }
     } else {
       this._logResult('Welcome to CollinOS!\n\
@@ -162,16 +107,34 @@ class MethodHandler {
 
   _cd = directory => {
     try {
-      this.directoryNavigator.changeDirectory(directory);
+      this.navigator.changeDirectory(directory);
       this.commandLine.newLine();
     } catch(e) {
       this._logResult(`no such directory ${directory}`);
     }
   }
 
+  _mkdir = directoryPath => {
+    try {
+      this.fileDirectoryManager.createDirectory(directoryPath);
+      this.commandLine.newLine();
+    } catch(e) {
+      this._logResult(e.message);
+    }
+  }
+
+  _touch = filePath => {
+    try {
+      this.fileDirectoryManager.createFile(filePath);
+      this.commandLine.newLine();
+    } catch(e) {
+      this._logResult(e.message);
+    }
+  }
+
   _cat = path => {
     try {
-      let file = this.directoryNavigator.getFile(path);
+      let file = this.navigator.getFile(path);
       if(file) {
         this._logResult(file.content);
       } else {
@@ -182,11 +145,11 @@ class MethodHandler {
     }
   }
 
-  _displayGui = () => {
+  _gui = () => {
     window.location.pathname = '/gui';
   }
 
-  _logAbout = () => {
+  _about = () => {
     this._logResult('Programmer, basketball junkie, negroni enjoyer.')
   }
 
@@ -202,16 +165,16 @@ class MethodHandler {
     }
   }
 
-  _presentResume = () => {
+  _resume = () => {
     this._logResult('not yet implemented.');
   }
 
   _pwd = () => {
-    this._logResult(this.directoryNavigator.currentDirectory.path);
+    this._logResult(this.navigator.currentDirectory.path);
   }
 
   _ls = directory => {
-    this._logResult(this.directoryNavigator.listDirectoryContent(directory || '.').join('\n'));
+    this._logResult(this.navigator.listDirectoryContent(directory || '.').join('\n'));
   }
 
   _linkedin = () => {

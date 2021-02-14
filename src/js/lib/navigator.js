@@ -1,10 +1,12 @@
 import { rootDir, collinDir } from './fileStructure.js';
+import { Directory } from './directory.js';
 
-class DirectoryNavigator {
+class Navigator {
   constructor() {
     this._rootDirectory = rootDir;
-    this._currentDirectory = localStorage.getItem('currentDirectoryPath') ? 
-      this._getDirectory(localStorage.getItem('currentDirectoryPath')) : collinDir;
+    this._currentDirectory = rootDir;
+    // this._currentDirectory = localStorage.getItem('currentDirectoryPath') ? 
+    //   this.getDirectory(localStorage.getItem('currentDirectoryPath')) : collinDir;
   }
 
   get rootDirectory() {
@@ -21,7 +23,7 @@ class DirectoryNavigator {
 
   changeDirectory = directoryFullPath => {
     if(directoryFullPath !== '.') {
-      let directory = this._getDirectory(directoryFullPath);
+      let directory = this.getDirectory(directoryFullPath);
       if(directory) {
         localStorage.setItem('currentDirectoryPath', directory.path)
         this.currentDirectory = directory;
@@ -35,7 +37,7 @@ class DirectoryNavigator {
     if(directoryFullPath === '.') {
       return this._directoryContent(this.currentDirectory);
     } else {
-      let directory = this._getDirectory(directoryFullPath);
+      let directory = this.getDirectory(directoryFullPath);
       if(directory) {
         return this._directoryContent(directory)
       }
@@ -43,18 +45,18 @@ class DirectoryNavigator {
   }
 
   getFile = filePath => {
-    let parsedFilePath = this._parsedUserInputDirectory(filePath);
+    let parsedFilePath = Directory.parsePath(filePath);
     let inputtedFile = parsedFilePath.pop();
-    let directory = parsedFilePath.length > 0 ? this._getDirectory(parsedFilePath.join('/')) : this.currentDirectory;
+    let directory = parsedFilePath.length > 0 ? this.getDirectory(parsedFilePath.join('/')) : this.currentDirectory;
     return directory.getFile(inputtedFile);
   }
 
   availableDirectoriesAndFilesForUserInput = userInput => {
-    let parsedDirectoryPath = userInput ? this._parsedUserInputDirectory(userInput) : [];
+    let parsedDirectoryPath = userInput ? Directory.parsePath(userInput) : [];
     let userInputtedValue = parsedDirectoryPath.pop();
-    let startingDirectory = parsedDirectoryPath.length === 0 ? this.currentDirectory : this._getDirectory(parsedDirectoryPath.join('/'));
+    let startingDirectory = parsedDirectoryPath.length === 0 ? this.currentDirectory : this.getDirectory(parsedDirectoryPath.join('/'));
     if(this._tabbedUserInputIsValidDirectory(userInputtedValue, startingDirectory)) {
-      let validInputtedDirectory = this._getDirectory(userInput);
+      let validInputtedDirectory = this.getDirectory(userInput);
       if(validInputtedDirectory) {
         let availableDirectoryNames = validInputtedDirectory.childDirectoryNames().concat(validInputtedDirectory.files);
         return this._returnTabbedResults(availableDirectoryNames, userInput)
@@ -81,9 +83,9 @@ class DirectoryNavigator {
     return userInput === '..' || userInput === '~' || currentDir.childDirectoryNames().includes(userInput);
   }
 
-  _getDirectory = directoryFullPath => {
+  getDirectory = directoryFullPath => {
     let directoryToStartFrom = directoryFullPath.startsWith('~') ? this.rootDirectory : this.currentDirectory
-    return this._traverseToDirectory(this._parsedUserInputDirectory(directoryFullPath), directoryToStartFrom);
+    return this._traverseToDirectory(Directory.parsePath(directoryFullPath), directoryToStartFrom);
   }
 
   _traverseToDirectory = (parsedDirectoryPathToGoTo, directoryIn) => {
@@ -108,4 +110,4 @@ class DirectoryNavigator {
   }
 }
 
-export { DirectoryNavigator };
+export { Navigator };

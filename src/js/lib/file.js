@@ -1,5 +1,5 @@
 class File {
-  constructor({ name, content }) {
+  constructor({ name, content = undefined }) {
     this._name = name;
     this._content = content;
   }

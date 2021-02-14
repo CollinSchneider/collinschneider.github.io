@@ -1,5 +1,5 @@
 import { CommandHistory } from './commandHistory.js';
-import { DirectoryNavigator } from './directoryNavigator.js';
+import { Navigator } from './navigator.js';
 import { KeyHandler } from './keyHandler.js';
 import { MethodHandler } from './methodHandler.js'
 
@@ -13,7 +13,7 @@ class CommandLine {
     this.characterElementsInputted = [],
     this.currentCursorIndex = this.characterElementsInputted.length-1;
     
-    this.directoryNavigator = new DirectoryNavigator(this);
+    this.navigator = new Navigator(this);
     this.newLine();
     
     this.commandHistory = new CommandHistory;
@@ -76,7 +76,7 @@ class CommandLine {
     
     var directory = document.createElement('div');
     directory.className = 'directory';
-    directory.innerText = `CollinOS:${this.directoryNavigator.currentDirectory.path}$`
+    directory.innerText = `CollinOS:${this.navigator.currentDirectory.path}$`
     newLine.append(directory);
     
     var input = document.createElement('div');
@@ -91,7 +91,8 @@ class CommandLine {
     this.commandLineEl.append(newLine);
     this.characterElementsInputted = [];
     this.currentCursorIndex = -1;
-    this._moveHiddenInputToFocusedLine(newLine)
+    this._moveHiddenInputToFocusedLine(newLine);
+    window.scrollTo(0, window.innerHeight);
   }
 
   clearCurrentLine = () => {
