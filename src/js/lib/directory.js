@@ -33,6 +33,11 @@ class Directory {
   dirName = () => {
     return this.parsedPath()[this.parsedPath().length-1];
   }
+ 
+  fileNames = () => {
+    return this.files.map(file => file.name);
+  }
+
 
   findChildDirectory = dirName => {
     return this.directories.find(dir => dir.dirName() === dirName);
@@ -40,6 +45,10 @@ class Directory {
 
   childDirectoryNames = () => {
     return this.directories.map(dir => dir.dirName());
+  }
+
+  getFile = fileName => {
+    return this.files.find(file => file.name === fileName);
   }
 
   isRoot = () => {

@@ -24,11 +24,11 @@ class MethodHandler {
       'curl': {
         function: this._curl,
         help: 'Use `curl` to make a curl request to the (mandatory) URL endpoint provided.\n\n\
-Optional arguments:\n\
---method or --X to specify the request method (GET, POST)\n\
---data or -d to provide a JSON payload in your POST request (NO spaces)\n\n\
-Example:\n\
-curl https://www.google.com/foo --method=POST --data={"bar":"baz","hello":"world"}\n\n'
+                Optional arguments:\n\
+                --method or --X to specify the request method (GET, POST)\n\
+                --data or -d to provide a JSON payload in your POST request (NO spaces)\n\n\
+                Example:\n\
+                curl https://www.google.com/foo --method=POST --data={"bar":"baz","hello":"world"}\n\n'
       },
       'about': {
         function: this._logAbout,
@@ -140,8 +140,8 @@ curl https://www.google.com/foo --method=POST --data={"bar":"baz","hello":"world
   }
 
   _curl = commandArguments => {
-    var xhr = new XMLHttpRequest();
-    var url = this._getArgumentsWithoutParameter(commandArguments);
+    let xhr = new XMLHttpRequest();
+    let url = this._getArgumentsWithoutParameter(commandArguments);
     xhr.addEventListener("load", resp => { 
       this._logResult(resp.currentTarget.responseText);
 
@@ -151,10 +151,10 @@ curl https://www.google.com/foo --method=POST --data={"bar":"baz","hello":"world
     } else if(url.length > 1) {
       this._logResult('Multiple un-named arguments passed to the `curl` command. Only one un-named argument is allowed in order to specify the `url` option.');
     } else {
-      var method = this._getArgument(commandArguments, 'X') || this._getArgument(commandArguments, 'method') || 'GET';
-      var data = this._getArgument(commandArguments, 'data') || this._getArgument(commandArguments, 'd');
-      var corsProxyUrl = 'https://proxy-server-collin.herokuapp.com/proxy'
-      var xhrUrl = `${corsProxyUrl}?url=${url[0]}&method=${method}&data=${data}`;
+      let method = this._getArgument(commandArguments, 'X') || this._getArgument(commandArguments, 'method') || 'GET';
+      let data = this._getArgument(commandArguments, 'data') || this._getArgument(commandArguments, 'd');
+      let corsProxyUrl = 'https://proxy-server-collin.herokuapp.com/proxy'
+      let xhrUrl = `${corsProxyUrl}?url=${url[0]}&method=${method}&data=${data}`;
       xhr.open('GET', xhrUrl)
       xhr.send();
     }
@@ -170,7 +170,16 @@ curl https://www.google.com/foo --method=POST --data={"bar":"baz","hello":"world
   }
 
   _cat = path => {
-    this._logResult('not yet implemented.')
+    try {
+      let file = this.directoryNavigator.getFile(path);
+      if(file) {
+        this._logResult(file.content);
+      } else {
+        this._logResult(`no such file ${path}`);
+      }
+    } catch(e) {
+      this._logResult(`no such file ${path}`);
+    }
   }
 
   _displayGui = () => {

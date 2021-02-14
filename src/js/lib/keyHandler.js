@@ -103,8 +103,8 @@ class KeyHandler {
     let attemptedCommand = this.commandLine.currentUserInput.trim();
     let splitUserInput = attemptedCommand.split(' ');
     let userInputToAutoComplete = splitUserInput[splitUserInput.length-1];
-    if(splitUserInput[0] === 'ls' || splitUserInput[0] === 'cd') {
-      let availableDirectories = this.commandLine.directoryNavigator.availableDirectoriesForInput(splitUserInput[1]);
+    if(splitUserInput[0] === 'ls' || splitUserInput[0] === 'cd' || splitUserInput[0] === 'cat') {
+      let availableDirectories = this.commandLine.directoryNavigator.availableDirectoriesAndFilesForUserInput(splitUserInput[1]);
       this._handleAutoCompleteResults(availableDirectories, splitUserInput[0]);
     } else {
       let availableCommands = this.commandLine.methodHandler.availableMethods.filter(method => method.startsWith(userInputToAutoComplete));
