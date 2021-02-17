@@ -53,6 +53,10 @@ const commandDictionary = {
     detailedHelp: 'Use `ls` to list other files and directories.',
     generalHelp: 'Use `ls` to list other files and directories.'
   },
+  'rm': {
+    detailedHelp: 'Use `rm` to destroy the file or directory specified.',
+    generalHelp: 'Use `rm` to destroy the file or directory specified.'
+  },
   'cd': {
     detailedHelp: 'Use `cd` to change directories.',
     generalHelp: 'Use `cd` to change directories.'

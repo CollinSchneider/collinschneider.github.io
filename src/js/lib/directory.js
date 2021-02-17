@@ -44,8 +44,13 @@ class Directory {
     return formatted.split('/')
   }
 
-  remove = () => {
-    this.parentDirectory.directories.filter(dir => dir === this);
+  remove = directoryWithIn => {
+    if(this._canRemove(directoryWithIn)) {
+      let newDirectories = this.parentDirectory.directories.filter(dir => dir !== this);
+      this.parentDirectory.directories = newDirectories;
+    } else {
+      throw new Error('cannot remove directory while within it.');
+    }
   }
 
   addDirectory = directory => {
@@ -64,13 +69,22 @@ class Directory {
     return this.files.map(file => file.name);
   }
 
-
   findChildDirectory = dirName => {
     return this.directories.find(dir => dir.dirName() === dirName);
   }
 
   childDirectoryNames = () => {
     return this.directories.map(dir => dir.dirName());
+  }
+
+  isChildOfDirectory = directory => {
+    if(this.parentDirectory) {
+      if(this.parentDirectory === directory) {
+        return true;
+      } else {
+        return this.parentDirectory.isChildOfDirectory(directory);
+      }
+    }
   }
 
   getFile = fileName => {
@@ -81,14 +95,18 @@ class Directory {
     return this.parentDirectory === undefined;
   }
 
-  parsedPath = function() {
+  parsedPath = () => {
     let split = this.path.split('/');
     // remove the starting `/` if it's not the root dir
     return this.isRoot ? split : split.shift();
   }
 
+  _canRemove = directoryWithIn => {
+    return !this.isRoot() && !directoryWithIn.isChildOfDirectory(this)
+  }
+
   _checkValidity = () => {
-    if(this.path.includes('.')) throw Error('path cannot include `.`');
+    if(this.path.startsWith('.')) throw Error('path cannot start with `.`');
   }
 }
 

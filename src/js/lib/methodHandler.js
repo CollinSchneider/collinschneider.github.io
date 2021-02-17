@@ -36,6 +36,18 @@ class MethodHandler {
     this._logResult(`Invalid arguments provided for ${argParam}: ${argGiven}. Available arguments are: ${allowedArgs.join(', ')}.`);
   }
 
+  _getArgumentsWithoutFlag = argumentString => {
+    if(argumentString) {
+      return argumentString.split(' ').filter(arg => !arg.startsWith('-'));
+    }
+  }
+
+  _getArgumentFlag = (argumentString, flag) => {
+    if(argumentString) {
+      return argumentString.split(' ').find(arg => arg.trim() === flag)
+    }
+  }
+
   _getArgumentsWithoutParameter = argumentString => {
     if(argumentString) {
       return argumentString.split(' ').filter(arg => !arg.includes('='));
@@ -49,10 +61,6 @@ class MethodHandler {
         return split.split(/\s|&/)[0];
       }
     }
-  }
-
-  _clear = () => {
-    this.commandLine.clearConsole(true);
   }
 
   _help = optionalMethod => {
@@ -73,14 +81,15 @@ class MethodHandler {
                       Control + C starts a new line\n\
                       Command + K flushes the console\n\n\
                       Available commands:\n\
+                      gui.........................................................${this.commandDictionary.gui.generalHelp}\n\
+                      clear......................................................${this.commandDictionary.clear.generalHelp}\n\
                       curl [url]................................................${this.commandDictionary.curl.generalHelp}\n\
                       ls............................................................${this.commandDictionary.ls.generalHelp}\n\
                       cd...........................................................${this.commandDictionary.cd.generalHelp}\n\
                       pwd........................................................${this.commandDictionary.pwd.generalHelp}\n\
-                      gui.........................................................${this.commandDictionary.gui.generalHelp}\n\
-                      clear......................................................${this.commandDictionary.clear.generalHelp}\n\
                       mkdir.....................................................${this.commandDictionary.mkdir.generalHelp}\n\
                       touch.....................................................${this.commandDictionary.touch.generalHelp}\n\
+                      rm............................................................${this.commandDictionary.rm.generalHelp}\n\
                       cat.........................................................${this.commandDictionary.cat.generalHelp}\n\
                       vi...........................................................${this.commandDictionary.vi.generalHelp}\n\
                       email --method=[print|program]...........${this.commandDictionary.email.generalHelp}\n\
@@ -88,6 +97,10 @@ class MethodHandler {
                       about....................................................${this.commandDictionary.about.generalHelp}\n\
                       linkedin.................................................${this.commandDictionary.linkedin.generalHelp}\n\n`);
     }
+  }
+
+  _clear = () => {
+    this.commandLine.clearConsole(true);
   }
 
   _curl = commandArguments => {
@@ -124,6 +137,32 @@ class MethodHandler {
     try {
       this.fileDirectoryManager.createDirectory({ directoryPath: directoryPath });
       this.commandLine.newLine();
+    } catch(e) {
+      this._logResult(e.message);
+    }
+  }
+
+  _rm = args => {
+    try {
+      let fileOrDirectoryPath = this._getArgumentsWithoutFlag(args);
+      let directory = this.navigator.getDirectory(fileOrDirectoryPath[0]);
+      if(directory) {
+        let hasRecursiveflag = !!this._getArgumentFlag(args, '-rf');
+        if(hasRecursiveflag) {
+          directory.remove(this.navigator.currentDirectory);
+          this.commandLine.newLine();
+        } else {
+          this._logResult(`${fileOrDirectoryPath[0]} is a directory. add -rf argument to recursively destroy directory and all of its content.`);
+        }
+      } else {
+        let file = this.navigator.getFile(fileOrDirectoryPath[0]);
+        if(file) {
+          file.remove();
+          this.commandLine.newLine();
+        } else {
+          this._logResult(`no such file or directory: ${fileOrDirectoryPath[0]}`);
+        }
+      }
     } catch(e) {
       this._logResult(e.message);
     }

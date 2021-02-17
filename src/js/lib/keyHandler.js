@@ -126,7 +126,7 @@ class KeyHandler {
     let attemptedCommand = this.commandLine.currentUserInput.trim();
     let splitUserInput = attemptedCommand.split(' ');
     let userInputToAutoComplete = splitUserInput[splitUserInput.length-1];
-    if(['ls', 'cd', 'cat', 'mkdir', 'touch', 'vi'].includes(splitUserInput[0])) {
+    if(['ls', 'cd', 'cat', 'mkdir', 'touch', 'rm', 'vi'].includes(splitUserInput[0])) {
       let availableDirectoriesAndFiles = this.commandLine.navigator.availableDirectoriesAndFilesForUserInput(splitUserInput[1]);
       this._handleAutoCompleteResults(availableDirectoriesAndFiles, splitUserInput[0]);
     } else {

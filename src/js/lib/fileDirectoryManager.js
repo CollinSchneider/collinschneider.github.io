@@ -58,7 +58,7 @@ class FileDirectoryManager {
         dontSwitchBackToStartingDirectory: true
       });
     }
-    let newFile = new File({ name: newFileName });
+    let newFile = new File({ directory: this.navigator.currentDirectory, name: newFileName });
     this.navigator.currentDirectory.addFile(newFile);
     this.navigator.currentDirectory = startingDirectory;
   }
