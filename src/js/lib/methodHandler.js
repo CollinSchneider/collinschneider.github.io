@@ -136,7 +136,7 @@ class MethodHandler {
     try {
       let file = this.navigator.getFile(path);
       if(file) {
-        this._logResult(file.content);
+        this._logResult(file.content || '');
       } else {
         this._logResult(`no such file ${path}`);
       }

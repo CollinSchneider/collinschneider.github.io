@@ -64,6 +64,7 @@ class VimContentArea {
       this.cursorIndex = this.characterElements.length;
       this.contentArea.append(this.cursor);
     }
+    this.showCursor();
   }
 
   moveCursorToEndOfContent = () => {
