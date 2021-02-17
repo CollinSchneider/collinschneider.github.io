@@ -58,29 +58,35 @@ class MethodHandler {
   _help = optionalMethod => {
     if(optionalMethod) {
       if(this.commandDictionary[optionalMethod]) {
-        this._logResult(this.commandDictionary[optionalMethod].help)
+        this._logResult(this.commandDictionary[optionalMethod].detailedHelp)
       } else {
         this._invalidCommand(optionalMethod)
       }
     } else {
-      this._logResult('Welcome to CollinOS!\n\
-                      Run `help` at any time to see this list of available methods\n\
-                      Run `help name` to find out more about the method `name`\n\n\
+      this._logResult(`Welcome to CollinOS!\n\
+                      A web-based command line interface.\n\
+                      Run \`help\` at any time to see this list of available methods\n\
+                      Run \`help name\` to find out more about the method \`name\`\n\n\
                       Basic Usage:\n\
-                      If you\'d rather view the site from a GUI, use the `gui` command\n\
+                      If you\'d rather view the site from a GUI, use the \`gui\` command\n\
                       Use the up and down arrows to rotate through your command history.\n\
                       Control + C starts a new line\n\
                       Command + K flushes the console\n\n\
                       Available commands:\n\
-                      curl [url]................................................curl endpoints\n\
-                      ls............................................................list content of directory\n\
-                      pwd........................................................print current working directory\n\
-                      gui.........................................................switch to the GUI version of www.collinschneider.com\n\
-                      clear......................................................flushes this console (equivalent of Command + k)\n\
-                      email --method=[print|program]...........write an email to collin\n\
-                      resume --format=[browser|download]...view collin\'s resume\n\
-                      about....................................................learn more about collin\n\
-                      linkedin.................................................view collin\'s linkedin\n\n');
+                      curl [url]................................................${this.commandDictionary.curl.generalHelp}\n\
+                      ls............................................................${this.commandDictionary.ls.generalHelp}\n\
+                      cd...........................................................${this.commandDictionary.cd.generalHelp}\n\
+                      pwd........................................................${this.commandDictionary.pwd.generalHelp}\n\
+                      gui.........................................................${this.commandDictionary.gui.generalHelp}\n\
+                      clear......................................................${this.commandDictionary.clear.generalHelp}\n\
+                      mkdir.....................................................${this.commandDictionary.mkdir.generalHelp}\n\
+                      touch.....................................................${this.commandDictionary.touch.generalHelp}\n\
+                      cat.........................................................${this.commandDictionary.cat.generalHelp}\n\
+                      vi...........................................................${this.commandDictionary.vi.generalHelp}\n\
+                      email --method=[print|program]...........${this.commandDictionary.email.generalHelp}\n\
+                      resume --format=[browser|download]...${this.commandDictionary.resume.generalHelp}\n\
+                      about....................................................${this.commandDictionary.about.generalHelp}\n\
+                      linkedin.................................................${this.commandDictionary.linkedin.generalHelp}\n\n`);
     }
   }
 
