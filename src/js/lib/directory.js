@@ -45,7 +45,7 @@ class Directory {
   }
 
   remove = () => {
-    this.parentDirectory.directories.remove(dir => dir === this);
+    this.parentDirectory.directories.filter(dir => dir === this);
   }
 
   addDirectory = directory => {

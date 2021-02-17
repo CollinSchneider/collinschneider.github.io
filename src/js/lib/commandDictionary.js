@@ -28,6 +28,9 @@ const commandDictionary = {
     help: 'Use `email` to return collin\'s email.\n\
             Accepts the --method argument of `print` to print collin\'s email to STDOUT or `program` to compose an email in your default mail program. Default is `print`.'
   },
+  'vi': {
+    help: 'Use `vi` to open the vim editor with the specified file'
+  },
   'pwd':{
     help: 'Use `pwd` to print current location'
   },

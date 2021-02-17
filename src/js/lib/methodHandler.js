@@ -51,7 +51,7 @@ class MethodHandler {
     }
   }
 
-  _clearConsole = () => {
+  _clear = () => {
     this.commandLine.clearConsole(true);
   }
 
@@ -116,7 +116,7 @@ class MethodHandler {
 
   _mkdir = directoryPath => {
     try {
-      this.fileDirectoryManager.createDirectory(directoryPath);
+      this.fileDirectoryManager.createDirectory({ directoryPath: directoryPath });
       this.commandLine.newLine();
     } catch(e) {
       this._logResult(e.message);
@@ -155,14 +155,14 @@ class MethodHandler {
 
   _email = methodArguments => {
     var method = this._getArgument(methodArguments, 'method') || 'print';
-    if(method === 'print') {
-      this._logResult('collin\'s email: collinschneider3@gmail.com');
-    } else if(method === 'program') {
-      window.location.href = 'mailto:collinschneider3@gmail.com';
-      this.commandLine.newLine();
-    } else {
-      this._invalidArgument('method', method, ['print', 'program']);
-    }
+    let actions = {
+      'print': this._logResult('collin\'s email: collinschneider3@gmail.com'),
+      'program': (() => {
+        window.location.href = 'mailto:collinschneider3@gmail.com';
+        this.commandLine.newLine();
+      })()
+    };
+    return actions[method] || this._invalidArgument('method', method, ['print', 'program']);
   }
 
   _resume = () => {
@@ -175,6 +175,15 @@ class MethodHandler {
 
   _ls = directory => {
     this._logResult(this.navigator.listDirectoryContent(directory || '.').join('\n'));
+  }
+
+  _vi = directoryPath => {
+    try {
+      let file = this.navigator.getFile(directoryPath);
+      this.commandLine.displayVimEditor(file);
+    } catch(e) {
+      this._logResult(e.message);
+    }
   }
 
   _linkedin = () => {

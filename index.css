@@ -20,8 +20,22 @@ body.console {
   overflow-y: scroll;
 }
 
+.hidden {
+  display: none;
+}
+
 #console {
   padding: 10px;
+}
+
+#vim-editor-container {
+  height: 100vh;
+}
+
+#vim-editor-action-area {
+  position: absolute;
+  bottom: 2vh;
+  left: 2vw;
 }
 
 #console .blinking {
@@ -50,7 +64,7 @@ body.console {
   margin-right: 5px;
 }
 
-#console .directory, #console .user-input, #console #cursor {
+#console .directory, #console .user-input, #console #cursor, #vim-cursor {
   display: inline-block;
 }
 

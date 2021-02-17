@@ -2,12 +2,16 @@ import { CommandHistory } from './commandHistory.js';
 import { Navigator } from './navigator.js';
 import { KeyHandler } from './keyHandler.js';
 import { MethodHandler } from './methodHandler.js'
+import { Vim } from './vim.js';
 
 class CommandLine {
   constructor(element) {
     this.commandLineEl = element;
+    this.userInputsContainer = this.commandLineEl.querySelector('#user-inputs-container');
+    this.vimEditorContainer = this.commandLineEl.querySelector('#vim-editor-container');
     this.currentUserInput = '',
     this._createCursor();
+    this._setReloadListener();
 
     this.hiddenMobileInput = document.querySelector('#hidden-input-container'),
     this.characterElementsInputted = [],
@@ -19,6 +23,7 @@ class CommandLine {
     this.commandHistory = new CommandHistory;
     this.keyHandler = new KeyHandler(this);
     this.methodHandler = new MethodHandler(this);
+    this.vimEditor = new Vim(this);
   }
 
   setInputText = text => {
@@ -27,7 +32,7 @@ class CommandLine {
   }
 
   addCharacterToUserInput = character => {
-    var charEl = document.createElement('span');
+    let charEl = document.createElement('span');
     charEl.className = 'character';
     charEl.innerText = character;
     this.currentLineUserInputEl.insertBefore(charEl, this.characterElementsInputted[this.currentCursorIndex+1]);
@@ -37,7 +42,7 @@ class CommandLine {
   }
 
   removeCharacterInFocus = () => {
-    var element = this.characterElementsInputted[this.currentCursorIndex];
+    let element = this.characterElementsInputted[this.currentCursorIndex];
     if(element) {
       element.remove();
       this.characterElementsInputted.splice(this.currentCursorIndex, 1);
@@ -47,7 +52,7 @@ class CommandLine {
   }
 
   clearConsole = (clearUserInput = false) => {
-    this.commandLineEl.innerHTML = '';
+    this.userInputsContainer.innerHTML = '';
     var userInputBeforeClear = this.currentUserInput;
     this.newLine();
     if(!clearUserInput) {
@@ -69,6 +74,16 @@ class CommandLine {
     results.innerText = message;
     this.currentLineEl.append(results);
   }
+
+  displayVimEditor = file => {
+    this.vimEditor.displayEditor(file);
+    this.keyHandler.pauseListeners();
+  }
+
+  hideVimEditor = () => {
+    this.vimEditor.hideEditor();
+    this.keyHandler.resumeListeners();
+  }
   
   newLine = () => {
     var newLine = document.createElement('div');
@@ -88,11 +103,10 @@ class CommandLine {
     this.currentUserInput = '';
 
     input.appendChild(this.cursor);
-    this.commandLineEl.append(newLine);
+    this.userInputsContainer.append(newLine);
     this.characterElementsInputted = [];
     this.currentCursorIndex = -1;
     this._moveHiddenInputToFocusedLine(newLine);
-    window.scrollTo(0, window.innerHeight);
   }
 
   clearCurrentLine = () => {
@@ -118,6 +132,7 @@ class CommandLine {
   _moveHiddenInputToFocusedLine = newLine => {
     var rect = newLine.getBoundingClientRect();
     this.hiddenMobileInput.style.top = `${rect.top}px`;
+    window.scrollTo(0, window.innerHeight);
   }
   
   _createCursor = () => {
@@ -127,6 +142,13 @@ class CommandLine {
       this.cursor.className = 'blinking text';
       this.cursor.innerText = '_';
     }
+  }
+
+  _setReloadListener = () => {
+    window.addEventListener('beforeunload', e => {
+      (e || window.event).returnValue = "still there?";
+      // alert('are you sure you want to leave? all changes are not persistant and your changes will not be saved.')
+    })
   }
 }
 
