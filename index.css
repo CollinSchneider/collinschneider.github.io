@@ -1,3 +1,24 @@
+body.gui {
+  text-align: center;
+  background: beige;
+}
+
+body.gui h4 {
+  font-family: 'Playfair Display', serif;
+}
+
+body.gui a.cli-link {
+  color: lime;
+  font-family: 'Lexend Mega', sans-serif;
+  background: black;
+  text-decoration: none;
+  padding: 10px;
+}
+
+body.gui a.cli-link:hover {
+  background: darkgrey;
+}
+
 #hidden-input-container {
   width: 0;
   height: 0;
@@ -15,7 +36,6 @@ body.console {
   cursor: text;
   width: 100vw;
   height: 100vh;
-  /* padding: 10px; */
   overflow-wrap: break-word;
   overflow-y: scroll;
 }
@@ -28,17 +48,13 @@ body.console {
   padding: 10px;
 }
 
-#vim-editor-container {
-  height: 100vh;
-}
-
 #vim-editor-action-area {
   position: absolute;
   bottom: 2vh;
   left: 2vw;
 }
 
-#console .blinking {
+.blinking {
   animation: blink-animation 1s steps(5, start) infinite;
   -webkit-animation: blink-animation 1s steps(5, start) infinite;
 }
