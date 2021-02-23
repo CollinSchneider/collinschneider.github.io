@@ -46,17 +46,20 @@ class KeyHandler {
         case 17:
           this.controlKeyIsPressed = true;
           break;
+        case 27:
+          window.location.pathname = '/';
+          break;
+        case 67:
+          if(this.controlKeyIsPressed) this.commandLine.newLine();
+          break;
+        case 75:
+          if(this.commandKeyIsPressed) this.commandLine.clearConsole();
+          break;
         case 91:
           this.commandKeyIsPressed = true;
           break;
         case 93:
           this.commandKeyIsPressed = true;
-          break;
-        case 75:
-          if(this.commandKeyIsPressed) this.commandLine.clearConsole();
-          break;
-        case 67:
-          if(this.controlKeyIsPressed) this.commandLine.newLine();
           break;
         default:
           // not a hot key
