@@ -1,8 +1,7 @@
 # CollinOS :computer:
 CollinOS is a javascript-based mock CLI for the web. Changes are not persistent (yet) and will be flushed on a page reload.
-<p align="center">
-  <img width="460" height="300" src="http://www.fillmurray.com/460/300">
-</p>
+
+![caption](screenrecord.gif)
 ## Available Commands
 ```
 help [?command]                     List all commands. Optional command argument for detailed information on specified command.
