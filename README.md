@@ -1,5 +1,5 @@
 # CollinOS :computer:
-CollinOS is a javascript-based mock CLI for the web. Changes are not persistent (yet) and will be flushed on a page reload.
+[CollinOS](https://www.collinschneider.com/cli) is a javascript-based mock CLI for the web. Changes are not persistent (yet) and will be flushed on a page reload.
 
 ![caption](screenrecord.gif)
 ## Available Commands
