@@ -12,7 +12,7 @@ const projectsDir = new Directory({ path: '~/Users/collin/projects', parentDirec
 
 const bashProfile = new File({ directory: rootDir, name: '.bash_profile', content: 'BACKGROUND=black\nCOLOR=limegreen' })
 const aboutFile = new File({ directory: welcomeDir, name: 'about.txt', content: 'Hi, I\'m Collin. Welcome to CollinOS.' });
-const resumeFile = new File({ directory: collinDir, name: 'resume.txt', content: 'Done did some things.' });
+const resumeFile = new File({ directory: collinDir, name: 'resume.txt', content: 'Programmer, builder, tinkerer.' });
 
 rootDir.directories = usersDir;
 rootDir.files = bashProfile;
